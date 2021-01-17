@@ -1,0 +1,48 @@
+<%- include('include/head.ejs') %>
+<link rel='stylesheet' href="/css/style.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.1/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+<div class="container-fluid">
+    <%- include('include/navigation.ejs') %>
+    <div class="grid">
+        <div></div>
+        <div class="row">
+            <div class=" col-xs-12 ; alert alert-warning" role="alert">
+                <h1>Welcome to <%= title %> page</h1>
+                <p>Pleases enter your contact details and press send</p>
+                <form action="/register/login" method="POST">
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                            <label for="email">Email address</label>
+                            <input type="email" class="form-control" name="mail" id="email" placeholder="name@example.com" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                        <label for="password">Password:</label>
+                        <input class="form-control" id="password" minlength="8" type=password name=passwords required >
+                        </div>
+                    </div>
+                    <input type="submit" class="btn btn-primary">
+                    <a href="/register">To logUp press here</a>
+                </form>
+                <% if (invalidPassword) { %>
+                    <p> The password that you entered is invalid .<br> try again!</p>
+                <% } %>
+
+                <% if (invalidEmail) { %>
+                    <p> The email that you entered is invalid .<br> try again!</p>
+                <% } %>
+            </div>
+        </div>
+        <div></div>
+    </div>
+</div>
+</body>
+
+</html>
