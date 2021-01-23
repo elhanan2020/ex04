@@ -1,35 +1,30 @@
-const path = require('path');
-var logger = require('morgan');
-const express = require('express');
 const bodyParser = require('body-parser');
 const session = require('express-session');
+var express = require('express');
+var path = require('path');
+//var cookieParser = require('cookie-parser');
+var logger = require('morgan');
 
-const errorController = require('./controller/error');
+var adminRoutes = require('./routes/admin');
+var regRoutes = require('./routes/registering');
+var weatherRoutes = require('./routes/api');
 
-const app = express();
-
+var app = express();
 app.set('view engine', 'ejs');
 app.set('views', 'views');
 
-const adminRoutes = require('./routes/admin');
-const regRoutes = require('./routes/registering');
-const weatherRoutes = require('./routes/api');
 app.use(logger('dev'));
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+//app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(session({
-    secret:"mysecretsession",
-    resave: false, // Force save of session for each request
-    saveUninitialized: false, // Save a session that is new, but has not been modified
-    cookie: {maxAge: 10*60*1000 }, // milliseconds!
-    alreadyExist:false,
-    }));
+    secret:"keyboard cat",
+    resave: true,
+    saveUninitialized: false,
+    cookie: { secure: false }
+}));
 app.use('/register', adminRoutes);
-app.use('/registering', regRoutes);
 app.use('/api', weatherRoutes);
-//app.use(shopRoutes);
-
-app.use(errorController.get404);
-
-app.listen(3000);
+module.exports = app;

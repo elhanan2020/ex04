@@ -9,13 +9,19 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       email: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        unique: true,
+        validate:{
+          isEmail: true,
+        }
       },
       firstName: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        isAlphanumeric: true
       },
       lastName: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        isAlphanumeric: true
       },
       password: {
         type: Sequelize.STRING

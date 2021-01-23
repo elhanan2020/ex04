@@ -3,10 +3,15 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <script src="/javascripts/weather.js"> </script>
 <link rel="stylesheet" href="https://cdn.rtlcss.com/bootstrap/v4.2.1/css/bootstrap.min.css" integrity="sha384-vus3nQHTD+5mpDiZ4rkEPlnkcyTP+49BhJ4wJeJunw06ZAp+wzzeBPUXr42fi8If" crossorigin="anonymous">
-
+<script>
+    if (window.history.replaceState) {
+        window.history.replaceState (null, null, window.location.href);
+    }
+</script>
 </head>
 
-<body>
+<body >
+
 <div class="container-fluid">
 <%- include('include/navigation.ejs') %>
     <div class="my_web_weather">
@@ -15,8 +20,6 @@
                 <div class="col-md-4  text-center ;alert alert-secondary">
                     <h1>Hello <%= Username %></h1>
                     <h3>Welcome to Weather forecast site</h3>
-                    <img src="https://www.google.co.il/imgres?imgurl=https%3A%2F%2Fwww.almanac.com%2Fsites%2Fdefault%2Ffiles%2Fimage_nodes%2Frainbow-weather.jpg&imgrefurl=https%3A%2F%2Fwww.almanac.com%2Fweather%2Fhistory&tbnid=7D0QUI6tCit56M&vet=12ahUKEwjQ_ae-0ZvuAhUak6QKHaeGA8UQMygAegUIARCoAQ..i&docid=Jh0QyDTotxC0LM&w=1920&h=1280&q=weather%20pictures&hl=fr&authuser=0&ved=2ahUKEwjQ_ae-0ZvuAhUak6QKHaeGA8UQMygAegUIARCoAQ" alt="">
-
                 </div>
             </div>
             <div class="row">
@@ -35,21 +38,27 @@
                         </form>
                         <div style="text-align:left">
                             <button class="btn btn-primary" id="Add_Button">Add this position</button>
-
-
                         </div>
                     </div>
                     <br>
+                    <div  class="alert alert-danger" id="errorCity" style="display: none;text-align: left"></div>
                     <ul class="alert alert-danger" id="errorField" style="display: none;text-align: left">
 
                     </ul>
                 </div>
+
                 <div class="col-md-6 "><br>
                     <div class="alert alert-secondary" id="list1" style="display: none">
                         <div id="list" style="text-align:left"></div>
                         <button class="btn btn-danger" id="EraseLocation">Erase</button>
                         <button class="btn btn-primary" id="Get_the_Weather">Get Weather</button>
+                        <button class="btn btn-secondary" id="EraseAll">Erase all</button>
                     </div>
+                </div>
+            </div>
+            <div  class="d-flex justify-content-center" >
+                <div id ="spinner" class="spinner-border" role="status" style="width: 10rem; height: 10rem;display: none;filter: brightness(50%);">
+                    <span class="sr-only">Loading...</span>
                 </div>
             </div>
             <div class="row">
@@ -105,6 +114,7 @@
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 </div>

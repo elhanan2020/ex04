@@ -13,6 +13,10 @@ router.get('/password', productsController.getaPassword);
 
 router.get('/login',productsController.log);
 
+router.get('/logout',productsController.logout);
+
+router.get('/registering',productsController.registering);
+
 router.get('/weather',productsController.weatherPage);
 
 router.post('/login', productsController.logIn);

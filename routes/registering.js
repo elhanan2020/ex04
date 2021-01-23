@@ -8,6 +8,7 @@ app.use(cookiesparser());
 
 
 router.post('/', (req, res) => {
+    console.log("registering");
         let email =req.session.emaill ;
         let firstName =req.session.firstName;
         let lastName=req.session.lastName;
