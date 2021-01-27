@@ -1,13 +1,12 @@
+
 <%- include('include/head.ejs') %>
-<link  rel="stylesheet"  href="/css/meteo.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <script src="/javascripts/weather.js"> </script>
-<link rel="stylesheet" href="https://cdn.rtlcss.com/bootstrap/v4.2.1/css/bootstrap.min.css" integrity="sha384-vus3nQHTD+5mpDiZ4rkEPlnkcyTP+49BhJ4wJeJunw06ZAp+wzzeBPUXr42fi8If" crossorigin="anonymous">
-<script>
-    if (window.history.replaceState) {
-        window.history.replaceState (null, null, window.location.href);
-    }
-</script>
+<link  rel="stylesheet"  href="/css/meteo.css">
+<link rel='stylesheet' href="/css/style.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 </head>
 
 <body >
@@ -36,11 +35,15 @@
                                 <br>
                             </div>
                         </form>
+                        <a href=""></a>
                         <div style="text-align:left">
                             <button class="btn btn-primary" id="Add_Button">Add this position</button>
+
                         </div>
+                        <div id="notconnected"></div>
                     </div>
                     <br>
+
                     <div  class="alert alert-danger" id="errorCity" style="display: none;text-align: left"></div>
                     <ul class="alert alert-danger" id="errorField" style="display: none;text-align: left">
 

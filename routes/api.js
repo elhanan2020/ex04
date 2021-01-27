@@ -17,7 +17,7 @@ router.get('/city', (req, res) => {
             });
     }
     else
-        res.redirect("/register/login");
+        return res.status(404).send("you are not connected");
 });
 
 router.post('/getPosition/:city', (req, res) => {
@@ -32,7 +32,7 @@ router.post('/getPosition/:city', (req, res) => {
             });
     }
     else
-        res.redirect("/register/login");
+        res.sendStatus(404).send("it was a error")
 });
 
 
@@ -47,7 +47,7 @@ router.post('/position', (req, res) => {
             });
    }
     else
-        res.redirect("/register/login");
+        res.sendStatus(404).send("it was a error")
 });
 
 
@@ -62,7 +62,7 @@ router.delete('/deleteAllCity', (req, res) => {
             })
     }
     else
-        res.redirect("/register/login");
+        res.sendStatus(404).send("it was a error")
 });
 
 router.delete('/deleteCity/:id', (req, res) => {
@@ -76,6 +76,6 @@ router.delete('/deleteCity/:id', (req, res) => {
                 })
     }
     else
-        res.redirect("/register/login");
+        res.sendStatus(404).send("it was a error")
 });
 module.exports = router;

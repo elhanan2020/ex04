@@ -1,10 +1,7 @@
-
 var Cookies = require('cookies')
-
 const  express =require("express");
 const db = require('../models');
 const app = express();
-
 const cookiesparser = require("cookie-parser");
 app.use(cookiesparser());
 var keys = ['keyboard cat']
@@ -13,6 +10,8 @@ exports.getHisData = (req, res, next) => {
     res.render('index', {
         title: 'SignUp ',
         path: '/register',
+        connected: req.session.logIn === true,
+        youAreRegistered: req.session.register === true,
         isWasaProblem:req.session.alreadyExist === true
     });
 };
@@ -22,6 +21,7 @@ exports.chechTheMail = (req, res, next) => {
         db.Contact.findOne({where: {email: req.body.mail}}).then(function(maill) {
             if (!maill) {
                 req.session.alreadyExist =  false;
+
                 req.session.firstName =  req.body.firstName;
                 req.session.emaill =   req.body.mail;
                 req.session.lastName  =  req.body.Secondname;
@@ -38,12 +38,15 @@ exports.chechTheMail = (req, res, next) => {
 exports.getaPassword = (req, res, next) => {
     res.render('password', {
         title: 'Password ',
+        connected: req.session.logIn === true,
+        youAreRegistered: req.session.register === true,
         path: '/Password',
     });
 };
 
 exports.logIn = (req, res, next) => {
     req.session.emaill =   req.body.mail;
+    req.session.register = false;
     db.Contact.findOne({where: {email: req.body.mail}})
         .then(function(passwords) {
         if (passwords.password.toString() === req.body.passwords){
@@ -59,6 +62,8 @@ exports.logIn = (req, res, next) => {
            else{
             res.render('logIn' , {
                 title: 'logIn' ,
+                youAreRegistered: req.session.register === true,
+                connected: req.session.logIn === true,
                 invalidPassword: true,
                 invalidEmail:false
             });
@@ -67,7 +72,9 @@ exports.logIn = (req, res, next) => {
         console.log('***There was an error getting a contact', JSON.stringify(err))
                 res.render('logIn' , {
                     title: 'logIn' ,
+                    connected: req.session.logIn === true,
                     invalidPassword: false,
+                    youAreRegistered: req.session.register === true,
                     invalidEmail: true
                 });
 
@@ -82,7 +89,6 @@ exports.enterPassword = (req, res, next) => {
     var lastVisit = cookies.get('Registered', {signed: true});
     if (lastVisit) {
         req.session.password = req.body.passwords;
-        registered = true;
         res.redirect("/register/registering");
     } else
         res.redirect("/register");
@@ -91,6 +97,8 @@ exports.enterPassword = (req, res, next) => {
 exports.log = (req , res , next) => {
     res.render('logIn' , {
         title: 'logIn' ,
+        youAreRegistered: req.session.register === true,
+        connected: req.session.logIn === true,
         invalidPassword:false,
         invalidEmail:false
     });
@@ -104,6 +112,8 @@ exports.weatherPage = (req , res , next) => {
     if(req.session.logIn === true) {
         res.render('weather', {
             title: 'weather',
+            connected: req.session.logIn === true,
+            youAreRegistered: req.session.register === true,
             Username: req.session.firstName+" "+req.session.lastName
         });
     }
@@ -112,15 +122,24 @@ exports.weatherPage = (req , res , next) => {
 };
 
 exports.registering = (req , res , next) => {
-    return db.Contact.create({email:req.session.emaill ,firstName:req.session.firstName,lastName:req.session.lastName,password:req.session.password})
+    req.session.register =  true;
+    const email = req.session.emaill
+    const firstName = req.session.firstName
+    const lastName = req.session.lastName
+    const password = req.session.password
+    return db.Contact.create({email ,firstName,lastName,password})
         .then((contact) =>  res.render('logIn', {
             title: 'log In ',
             path: '/logIn',
+            connected: req.session.logIn === true,
+            youAreRegistered: req.session.register === true,
             invalidPassword:req.session.invallablePassword === true,
             invalidEmail:req.session.invalidEmail === true
         }))
         .catch((err) => {
-            console.log('***There was an error creating a contact', JSON.stringify(err))
-            return res.status(400).send(err)
+            console.log('***There was an error creating a contact', JSON.stringify(err));
+            req.session.logIn = false;
+            req.session.alreadyExist =  true;
+            res.redirect("/register");
         })
 };

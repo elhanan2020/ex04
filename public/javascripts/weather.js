@@ -13,10 +13,10 @@
     //the main function that showing the weather to the user
     var show_weather = function () {
           function getData() {
-              document.querySelector("#spinner").style.display = "block"
             var myImage = document.querySelector('img');
             getThePosition()
                   .then(position => {
+                      document.querySelector("#spinner").style.display = "block";
                         fetch('http://www.7timer.info/bin/api.pl?lon=' + position[1][0] + '&lat=' + position[1][1] + '&product=civillight&output=json')
                             .then(function (response) {
                                 if (response.status !== 200) {
@@ -88,10 +88,11 @@
         fetch('../api/city')
             .then(
                 function (response) {
-                    if (response.status !== 200) {
-                        document.querySelector("#list").innerHTML = 'Looks like there was a problem. Status Code: ' +
-                            response.status;
-                        return;
+                    if(response.status === 404)
+                    {
+                        {
+                            if(confirm("you are no longer connected press the button to go back to")) document.location = '/register/login';
+                        }
                     }
                     response.json()
                         .then(function (data) {
@@ -129,19 +130,30 @@
                 .then(text => {
                     if (text.status === 401) {
                         document.querySelector("#errorCity").style.display = "block";
-                        document.querySelector("#errorCity").innerHTML = "The city you have chosen this is already in the database ";
+                        document.querySelector("#errorCity").innerHTML = "The city you have chosen  is already in the database ";
                     }
-                    console.log(text);
+                    else if(text.status === 404)
+                    {
+                        {
+                            if(confirm("you are no longer connected press the button to go back to")) document.location = '/register/login';
+                        }
+                    }
+                    else{
+                        console.log(text);
+                        initData();
+                        showTheCity();
+                    }
                 }).catch(function (error) {
                 console.log(error);
             });
-            initData();
-            showTheCity();
+
         }
     }
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     //this function delete the city that i select with a radiobutton
     function deleteLoc() {
+        document.getElementById("show_the_weather").style.display = "none";
+        document.getElementById("myImage").style.display = "none";
         var cityDel = "";
         var city = document.getElementsByTagName("input");
         document.getElementById("show_the_weather").style.display = "none";
@@ -154,25 +166,40 @@
                 "Content-Type": "application/json",
             },
         }).then(text => {
-            console.log(text);
+            if(text.status === 404)
+            {
+                if(confirm("you are no longer connected press the button to go back to")) document.location = '/register/login';
+            }
+            else
+                showTheCity();
         }).catch(function (error) {
             console.log(error);
         });
-        showTheCity();
+
     } //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     //this function delete the city that i select with a radiobutton
     function deleteAll() {
+        document.getElementById("show_the_weather").style.display = "none";
+        document.getElementById("myImage").style.display = "none";
         fetch('http://localhost:3000/api/deleteAllCity', {
             method: 'DELETE',
             headers: {
                 "Content-Type": "application/json",
             },
         }).then(text => {
-            console.log(text);
+            if(text.status === 404){
+                {
+                    if(confirm("you are no longer connected press the button to go back to")) document.location = '/register/login';
+                }
+            }
+            else{
+                console.log(text);
+                showTheCity();
+            }
         }).catch(function (error) {
             console.log(error);
         });
-        showTheCity();
+
     }
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     //it's a function that save the value of any city that i get in the array
@@ -252,38 +279,20 @@
             if (city[x].checked)
                 cityName = city[x].value;
 
-            let response = await fetch('../api/getPosition/' + cityName,{
-                method: 'POST',
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            });
-            let data = await response.json()
-            return [cityName,data];
-
-        /*fetch('../api/getPosition/' + cityName,{
+        let response = await fetch('../api/getPosition/' + cityName, {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",
             },
-        })
-            .then(function (response) {
-                console.log(response);
-                    if (response.status !== 200) {
-                        document.querySelector("#list").innerHTML = 'Looks like there was a problem. Status Code: ' +
-                            response.status;
-                        return;
-                    }
-                    response.json()
-                        .then(function (data) {
-                            if (data.error)
-                                document.querySelector("#list").innerHTML = "Some error occured, is the database initialized?";
-                            else{
-                                console.log(data[0],data[1]);
-                                return [cityName,[data]];}
-                        })
-                })*/
+        });
+        if (response.status === 404) {
+            {
+                if (confirm("you are no longer connected press the button to go back to")) document.location = '/register/login';
+            }
+        } else {
+            let data = await response.json()
+            return [cityName, data];
+        }
     }
-
 
 })();

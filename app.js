@@ -4,7 +4,7 @@ var express = require('express');
 var path = require('path');
 //var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-
+const productsController = require('./controller/SignIn');
 var adminRoutes = require('./routes/admin');
 var regRoutes = require('./routes/registering');
 var weatherRoutes = require('./routes/api');
@@ -25,6 +25,7 @@ app.use(session({
     saveUninitialized: false,
     cookie: { secure: false }
 }));
+app.get('/', productsController.log);
 app.use('/register', adminRoutes);
 app.use('/api', weatherRoutes);
 module.exports = app;
